@@ -126,8 +126,14 @@ namespace SpotifyAutoPauser
             if (!IsSpotifyRunning()) return null;
             Process[] procs = GetSpotifyProcesses();
 
-            // I'm only expecting there to be one...
-            return procs[0].MainWindowTitle;
+			// seems like there are usually multiple Spotify processes - find the one with an actual title
+			string title = "";
+			foreach (Process proc in procs) {
+				if (proc.MainWindowTitle.Length > 0) {
+					title = proc.MainWindowTitle;
+				}		
+			}
+			return title;
         }
 
         private static bool IsSpotifyPlaying()

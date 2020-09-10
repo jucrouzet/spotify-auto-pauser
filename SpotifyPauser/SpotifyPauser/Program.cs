@@ -39,7 +39,7 @@ namespace SpotifyAutoPauser
             AutoRun.AutoRunCheck();
 
             // Check for updates
-            Updater.Check();
+            //Updater.Check();
 
             // Setup the session handler
             _ss = new SessionSwitchEventHandler(SessionSwitch);
@@ -94,11 +94,13 @@ namespace SpotifyAutoPauser
         {
             if (e.Reason == SessionSwitchReason.SessionLock)
             {
+                Console.WriteLine("Session Locked");
                 _wasPlaying = IsSpotifyPlaying();
                 SetSpotifyState(false);
             }
             else if (e.Reason == SessionSwitchReason.SessionUnlock)
             {
+                Console.WriteLine("Session Unlocked");
                 SetSpotifyState(_wasPlaying);
             }
         }
@@ -139,7 +141,7 @@ namespace SpotifyAutoPauser
         private static bool IsSpotifyPlaying()
         {
             string title = GetSpotifyTitle();
-            if (title == null || title.ToUpper() == "SPOTIFY") return false;
+            if (title == null || title.ToUpper().StartsWith("SPOTIFY")) return false; // title in pause is "Spotify Premium"
             return true;
         }
 
